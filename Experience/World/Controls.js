@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import Experience from "../Experience.js";
+import GSAP from "gsap"
 
 export default class Controls {
     constructor() {
@@ -7,8 +8,19 @@ export default class Controls {
         this.scene = this.experience.scene;
         this.resources = this.experience.resources;
         this.time = this.experience.time;
+        this.camera = this.experience.camera;
+
+        this.progress = 0;
+        this.dummyVector = new THREE.Vector3(0, 0, 0);
+
+        this.lerp = {
+            current: 0,
+            target: 0,
+            ease: 0.1,
+        }
 
         this.setPath();
+        this.onWheel();
     }
 
     setPath() {
@@ -18,7 +30,8 @@ export default class Controls {
             new THREE.Vector3(0, 0, 0),
             new THREE.Vector3(5, -5, 5),
             new THREE.Vector3(10, 0, 10)
-        ]);
+        ], true
+        );
 
         const points = this.curve.getPoints(50);
         const geometry = new THREE.BufferGeometry().setFromPoints(points);
@@ -30,12 +43,29 @@ export default class Controls {
         this.scene.add(curveObject)
     }
 
+    onWheel() {
+        window.addEventListener("wheel", (e) => {
+            console.log(e);
+            if (e.deltaY > 0) {
+                this.lerp.target += 0.1;
+            } else {
+                this.lerp.target -= 0.1;
+            }
+        });
+    }
+
     resize() {
 
     }
 
     update() {
-
+        this.lerp.current = GSAP.utils.interpolate(
+            this.lerp.current,
+            this.lerp.target,
+            this.lerp.ease
+        );
+        this.curve.getPointAt(1, this.position);
+        this.camera.orthographicCamera.position.copy(this.position);
     }
 
 }
