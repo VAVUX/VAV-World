@@ -17,7 +17,6 @@
   "main": "main.js",
   "dependencies": {
     "esbuild": "^0.16.13",
-    "fsevents": "^2.3.2",
     "function-bind": "^1.1.1",
     "gh-pages": "^4.0.0",
     "has": "^1.0.3",
@@ -30,6 +29,9 @@
     "rollup": "^3.9.1",
     "source-map-js": "^1.0.2",
     "supports-preserve-symlinks-flag": "^1.0.0"
+  },
+  "optionalDependencies": {
+    "fsevents": "*"
   },
   "author": "",
   "license": "ISC",
