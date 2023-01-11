@@ -33,11 +33,11 @@ export default class Renderer {
 
     resize() {
         this.renderer.setSize(this.sizes.width, this.sizes.height);
-        this.renderer.setPixelRation(this.sizes.pixelRatio);
+        this.renderer.setPixelRatio(this.sizes.pixelRatio);
     }
 
     update() {
-        this.renderer.render(this.scene, this.camera.perspectiveCamera);
+        this.renderer.render(this.scene, this.camera.orthographicCamera);
     }
 
 }

@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-import Sizes from "./utilities/sizes.js";
+import Sizes from "./utilities/Sizes.js";
 import Time from "./utilities/Time.js";
 import Resources from "./utilities/Resources.js";
 import assets from "./utilities/assets.js";
@@ -9,7 +9,7 @@ import Camera from "./Camera.js";
 import Renderer from "./Renderer.js";
 
 import World from "./World/World.js";
-import Room from "./World/Room.js";
+import Controls from "./World/Controls.js";
 
 
 export default class Experience {
@@ -27,26 +27,30 @@ export default class Experience {
         this.renderer = new Renderer();
         this.resources = new Resources(assets);
         this.world = new World();
-        this.room = new THREE.Scene();
-
-
-        this.time.on("update", () => {
-            this.update();
-        });
 
         this.sizes.on("resize", () => {
             this.resize();
+        });
+
+        this.time.on("update", () => {
+            this.update();
         });
     }
 
     resize() {
         this.camera.resize();
-        this.renderer.update();
+        this.world.resize();
+        this.renderer.resize();
     }
 
     update() {
+        this.preloader.update();
         this.camera.update();
+        this.world.update();
         this.renderer.update();
+        if (this.controls) {
+            this.controls.update();
+        }
     }
 }
 

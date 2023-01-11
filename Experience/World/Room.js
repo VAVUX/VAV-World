@@ -4,6 +4,7 @@ import Experience from "../Experience.js";
 export default class Room {
     constructor() {
         this.experience = new Experience();
+        this.room = new THREE.Scene();
         this.scene = this.experience.scene;
         this.resources = this.experience.resources;
         this.room = this.resources.items.room;

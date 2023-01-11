@@ -1,11 +1,12 @@
 import * as THREE from "three";
 import Experience from "../Experience.js";
-import GSAP from "gsap"
+import GSAP from "gsap";
 
 export default class Controls {
     constructor() {
         this.experience = new Experience();
         this.scene = this.experience.scene;
+        this.sizes = this.experience.sizes;
         this.resources = this.experience.resources;
         this.time = this.experience.time;
         this.camera = this.experience.camera;
@@ -18,6 +19,8 @@ export default class Controls {
             target: 0,
             ease: 0.1,
         }
+
+        this.position = new THREE.Vector3(0, 0, 0);
 
         this.setPath();
         this.onWheel();
@@ -47,9 +50,9 @@ export default class Controls {
         window.addEventListener("wheel", (e) => {
             console.log(e);
             if (e.deltaY > 0) {
-                this.lerp.target += 0.1;
+                this.lerp.target += 0.01;
             } else {
-                this.lerp.target -= 0.1;
+                this.lerp.target -= 0.01;
             }
         });
     }
@@ -64,7 +67,8 @@ export default class Controls {
             this.lerp.target,
             this.lerp.ease
         );
-        this.curve.getPointAt(1, this.position);
+        this.curve.getPointAt(this.lerp.current, this.position);
+        // this.progress += 0.001;
         this.camera.orthographicCamera.position.copy(this.position);
     }
 
