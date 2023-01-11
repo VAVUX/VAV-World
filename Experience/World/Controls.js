@@ -21,6 +21,7 @@ export default class Controls {
         }
 
         this.position = new THREE.Vector3(0, 0, 0);
+        this.lookAtPosition = new THREE.Vector3(0, 0, 0);
 
         this.setPath();
         this.onWheel();
@@ -51,8 +52,10 @@ export default class Controls {
             console.log(e);
             if (e.deltaY > 0) {
                 this.lerp.target += 0.01;
+                this.back = false;
             } else {
                 this.lerp.target -= 0.01;
+                this.back = true;
             }
         });
     }
@@ -67,9 +70,20 @@ export default class Controls {
             this.lerp.target,
             this.lerp.ease
         );
+        if (this.back) {
+            this.lerp.target -= 0.0001;
+        }
+        else {
+            this.lerp.target += 0.0001;
+        };
+        // this.lerp.target += 0.0001;
+        this.lerp.target = GSAP.utils.clamp(0, 1, this.lerp.target);
+        this.lerp.current = GSAP.utils.clamp(0, 1, this.lerp.current);
+        this.curve.getPointAt(this.lerp.current + 0.00001, this.lookAtPosition);
         this.curve.getPointAt(this.lerp.current, this.position);
         // this.progress += 0.001;
         this.camera.orthographicCamera.position.copy(this.position);
+        this.camera.orthographicCamera.lookAt(this.lookAtPosition);
     }
 
 }
